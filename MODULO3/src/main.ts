@@ -41,7 +41,7 @@ const grupoMusicalD: MusicGroup = {
 };
 
 const estiloTitulo =
-  "background-color:blue; font-size: 24px; font-weight: bold;";
+  "background-color:green; font-size: 24px; font-weight: bold;";
 
 console.log(`%c${grupoMusicalA.nombre}`, estiloTitulo);
 console.log(
