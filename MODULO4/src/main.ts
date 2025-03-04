@@ -1,55 +1,70 @@
 import "./style.css";
-
-let conseguir_turno_anterior = (): void => {
-  let turno = document.getElementsByClassName("numero-turno")[0];
-  if (turno) {
-    let turnoNumber: number = parseInt(turno.textContent || "0");
-    if (turnoNumber > 0) {
-      turnoNumber = turnoNumber - 1;
-    }
-    turno.textContent = turnoNumber.toString().padStart(2, "0");
+let turno: number = 0;
+const conseguirTurnoAnterior = (): void => {
+  const tituloTurno = document.querySelector(".numero-turno");
+  if (turno > 0 && tituloTurno) {
+    turno = turno - 1;
+    tituloTurno.textContent = turno.toString().padStart(2, "0");
   }
 };
 
-let conseguir_turno_siguiente = (): void => {
-  let turno = document.getElementsByClassName("numero-turno")[0];
-  if (turno) {
-    let turnoNumber: number = parseInt(turno.textContent || "0");
-    turnoNumber = turnoNumber + 1;
-    turno.textContent = turnoNumber.toString().padStart(2, "0");
+const conseguirTurnoSiguiente = (): void => {
+  const tituloTurno = document.querySelector(".numero-turno");
+  if (tituloTurno) {
+    turno = turno + 1;
+    tituloTurno.textContent = turno.toString().padStart(2, "0");
   }
 };
 
-let resetear_turno = (): void => {
-  let turno = document.getElementsByClassName("numero-turno")[0];
-  if (turno) {
-    turno.textContent = "00";
+const resetearTurno = (): void => {
+  const resetTurno = document.querySelector(".numero-turno");
+  if (resetTurno) {
+    resetTurno.textContent = "00";
+    turno = 0;
   }
 };
 
-let editar_turno = (): void => {
-  let turno = document.getElementsByClassName(
-    "input-turno"
-  )[0] as HTMLInputElement;
-  if (
-    turno &&
-    document.getElementsByClassName("numero-turno")[0] &&
-    document.getElementsByClassName("input-turno")[0]
-  ) {
-    let turnoValue = turno.value.padStart(2, "0");
-    document.getElementsByClassName("numero-turno")[0].textContent = turnoValue;
+const editarTurno = (): void => {
+  const turnoInput = document.querySelector(".input-turno") as HTMLInputElement;
+  if (turno && document.querySelector(".numero-turno")) {
+    (document.querySelector(".numero-turno") as HTMLInputElement).textContent =
+      turnoInput.value.padStart(2, "0");
+    turno = parseInt(turnoInput.value);
   }
 };
 
-document
-  .getElementById("btn-anterior")
-  ?.addEventListener("click", conseguir_turno_anterior);
-document
-  .getElementById("btn-siguiente")
-  ?.addEventListener("click", conseguir_turno_siguiente);
+const botonAnterior = document.getElementById("btn-anterior");
+if (
+  botonAnterior !== null &&
+  botonAnterior !== undefined &&
+  botonAnterior instanceof HTMLButtonElement
+) {
+  botonAnterior.addEventListener("click", conseguirTurnoAnterior);
+}
 
-document
-  .getElementById("btn-reiniciar")
-  ?.addEventListener("click", resetear_turno);
+const botonSiguiente = document.getElementById("btn-siguiente");
+if (
+  botonSiguiente !== null &&
+  botonSiguiente !== undefined &&
+  botonSiguiente instanceof HTMLButtonElement
+) {
+  botonSiguiente.addEventListener("click", conseguirTurnoSiguiente);
+}
 
-document.getElementById("btn-editar")?.addEventListener("click", editar_turno);
+const botonReiniciar = document.getElementById("btn-reiniciar");
+if (
+  botonReiniciar !== null &&
+  botonReiniciar !== undefined &&
+  botonReiniciar instanceof HTMLButtonElement
+) {
+  botonReiniciar.addEventListener("click", resetearTurno);
+}
+
+const botonEditarTurno = document.getElementById("btn-editar");
+if (
+  botonEditarTurno !== null &&
+  botonEditarTurno !== undefined &&
+  botonEditarTurno instanceof HTMLButtonElement
+) {
+  botonEditarTurno.addEventListener("click", editarTurno);
+}
