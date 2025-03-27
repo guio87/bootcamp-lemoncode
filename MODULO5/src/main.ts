@@ -3,22 +3,56 @@ import "./style.css";
 let puntuacion: number = 0;
 //MOSTRAR PUNTUACION
 const muestraPuntuacion = (puntuacion: number): void => {
-  const puntosMostrados: HTMLElement = document.querySelector(
-    "#puntos-num"
-  ) as HTMLElement;
+  const puntosMostrados = document.querySelector("#puntos-num");
   if (puntosMostrados && puntosMostrados.textContent) {
     puntosMostrados.textContent = puntuacion.toString();
   }
 };
 
+//ELEGIR NÚMERO
+const eligeNumero = (): number => {
+  return Math.floor(Math.random() * 10);
+};
+
+//CONTROLAR VALOR CARTA
+const controlarValorCarta = (carta: number): number => {
+  if (carta > 7) {
+    return carta + 2;
+  }
+  return carta;
+};
+//OBTENER URL CARTA
+const obtenerUrlCarta = (carta: number): string => {
+  switch (carta) {
+    case 1:
+      return "1_as-copas.jpg";
+    case 2:
+      return "2_dos-copas.jpg";
+    case 3:
+      return "3_tres-copas.jpg";
+    case 4:
+      return "4_cuatro-copas.jpg";
+    case 5:
+      return "5_cinco-copas.jpg";
+    case 6:
+      return "6_seis-copas.jpg";
+    case 7:
+      return "7_siete-copas.jpg";
+    case 10:
+      return "10_sota-copas.jpg";
+    case 11:
+      return "11_caballo-copas.jpg";
+    case 12:
+      return "12_rey-copas.jpg";
+    default:
+      return "";
+  }
+};
+
 //PEDIR CARTA
 const dameCarta = (): void => {
-  let carta: number = Math.floor(Math.random() * 12);
-  if (carta === 8 || carta === 9) {
-    carta += 2;
-  } else if (carta === 0) {
-    carta = 1;
-  }
+  const numeroAleatorio = eligeNumero();
+  const carta = controlarValorCarta(numeroAleatorio);
   console.log(carta);
   mostrarCarta(carta);
   sumarPuntuacion(carta);
@@ -29,68 +63,12 @@ const mostrarCarta = (carta: number): void => {
   const cartaImg = document.querySelector(
     "#carta-mostrada"
   ) as HTMLImageElement;
-  switch (carta) {
-    case 1:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/1_as-copas.jpg"
-      );
-      break;
-    case 2:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/2_dos-copas.jpg"
-      );
-      break;
-    case 3:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/3_tres-copas.jpg"
-      );
-      break;
-    case 4:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/4_cuatro-copas.jpg"
-      );
-      break;
-    case 5:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/5_cinco-copas.jpg"
-      );
-      break;
-    case 6:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/6_seis-copas.jpg"
-      );
-      break;
-    case 7:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/7_siete-copas.jpg"
-      );
-      break;
-    case 10:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/10_sota-copas.jpg"
-      );
-      break;
-    case 11:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/11_caballo-copas.jpg"
-      );
-      break;
-    case 12:
-      cartaImg?.setAttribute(
-        "src",
-        "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/12_rey-copas.jpg"
-      );
-      break;
-  }
+  const url = obtenerUrlCarta(carta);
+  cartaImg?.setAttribute(
+    "src",
+    "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/" +
+      url
+  );
 };
 
 //SUMAR PUNTUACION
@@ -108,15 +86,16 @@ const sumarPuntuacion = (carta: number): void => {
 
 //PERDER
 const gameOver = (): void => {
-  const resultado: HTMLElement = document.querySelector(
-    ".puntos"
-  ) as HTMLHeadingElement;
-  resultado.style.display = "none";
+  // const resultado: HTMLElement = document.querySelector(
+  //   ".puntos"
+  // ) as HTMLHeadingElement;
+  // resultado.style.display = "none";
   const gameOverText: HTMLHeadingElement = document.querySelector(
     ".game-over"
   ) as HTMLHeadingElement;
   gameOverText.style.display = "block";
-  ocultarBotonPedirCarta();
+  disableBotonPedirCarta();
+  disableBotonPlantarse();
   mostrarBotonReiniciar();
 };
 
@@ -130,8 +109,8 @@ const mostrarBotonReiniciar = (): void => {
   }
 };
 
-//OCULTAR BOTON PEDIR CARTA
-const ocultarBotonPedirCarta = (): void => {
+//INHABILITAR BOTON PEDIR CARTA
+const disableBotonPedirCarta = (): void => {
   const botonPedirCarta: HTMLButtonElement = document.querySelector(
     "#pedir-carta"
   ) as HTMLButtonElement;
@@ -150,32 +129,56 @@ const mostrarBotonPedirCarta = (): void => {
   }
 };
 
-//REINICIAR JUEGO
-const reiniciarJuego = (): void => {
-  puntuacion = 0;
+//INHABILITAR BOTON PLANTARSE
+const disableBotonPlantarse = (): void => {
+  const botonPlantarse: HTMLButtonElement = document.querySelector(
+    "#plantarse"
+  ) as HTMLButtonElement;
+  if (botonPlantarse instanceof HTMLButtonElement) {
+    botonPlantarse.disabled = true;
+  }
+};
 
+//HABILITAR BOTON PLANTARSE
+const enableBotonPlantarse = (): void => {
+  const botonPlantarse: HTMLButtonElement = document.querySelector(
+    "#plantarse"
+  ) as HTMLButtonElement;
+  if (botonPlantarse instanceof HTMLButtonElement) {
+    botonPlantarse.disabled = false;
+  }
+};
+
+//OCULTAR TEXTO GANAR
+const ocultarTextoGanar = (): void => {
   const winnerText: HTMLHeadingElement = document.querySelector(
     ".winner"
   ) as HTMLHeadingElement;
   if (winnerText && winnerText.style.display === "block") {
     winnerText.style.display = "none";
   }
+};
+
+//OCULTAR TEXTO PERDER
+const ocultarTextoPerder = (): void => {
   const gameOverText: HTMLHeadingElement = document.querySelector(
     ".game-over"
   ) as HTMLHeadingElement;
   if (gameOverText && gameOverText.style.display === "block") {
     gameOverText.style.display = "none";
   }
-  muestraPuntuacion(puntuacion);
-  const resultado: HTMLElement = document.querySelector(
-    ".puntos"
-  ) as HTMLHeadingElement;
-  resultado.style.display = "block";
-  mostrarBotonPedirCarta();
+};
+
+// OCULTAR BOTON REINICIAR
+const ocultarBotonReiniciar = (): void => {
   const botonReiniciar = document.querySelector("#reiniciar");
   if (botonReiniciar instanceof HTMLButtonElement) {
     botonReiniciar.style.display = "none";
   }
+};
+
+//MOSTRAR REVERSO CARTA
+const mostrarReversoCarta = (): void => {
   const cartaVuelta = document.querySelector(
     "#carta-mostrada"
   ) as HTMLImageElement;
@@ -183,10 +186,30 @@ const reiniciarJuego = (): void => {
     "src",
     "https://github.com/Lemoncode/fotos-ejemplos/blob/main/cartas/back.jpg?raw=true"
   );
+};
+
+//VACIAR MENSAJE PLANTAR
+const vaciarMensajePlantar = (): void => {
   const mensajePlantar: HTMLElement = document.querySelector(
     ".mensajePlantar"
   ) as HTMLElement;
   mensajePlantar.innerHTML = "";
+};
+//REINICIAR JUEGO
+const reiniciarJuego = (): void => {
+  puntuacion = 0;
+  ocultarTextoGanar();
+  ocultarTextoPerder();
+  muestraPuntuacion(puntuacion);
+  // const resultado: HTMLElement = document.querySelector(
+  //   ".puntos"
+  // ) as HTMLHeadingElement;
+  // resultado.style.display = "block";
+  mostrarBotonPedirCarta();
+  enableBotonPlantarse();
+  ocultarBotonReiniciar();
+  mostrarReversoCarta();
+  vaciarMensajePlantar();
 };
 
 //PLANTARSE
@@ -198,19 +221,23 @@ const mePlanto = (): void => {
   if (puntuacion <= 4) {
     mensajePlantar.innerText = "Has sido muy conservador";
     mostrarBotonReiniciar();
-    ocultarBotonPedirCarta();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
   } else if (puntuacion === 5) {
     mensajePlantar.innerText = "Te ha entrado el canguelo eh?";
     mostrarBotonReiniciar();
-    ocultarBotonPedirCarta();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
   } else if (puntuacion === 6 || puntuacion === 7) {
     mensajePlantar.innerText = "Casi casi...";
     mostrarBotonReiniciar();
-    ocultarBotonPedirCarta();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
   } else if (puntuacion === 7.5) {
     mensajePlantar.innerText = "¡ Lo has clavado! ¡Enhorabuena!";
     mostrarBotonReiniciar();
-    ocultarBotonPedirCarta();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
   }
 };
 
@@ -219,18 +246,14 @@ addEventListener("DOMContentLoaded", () => {
   muestraPuntuacion(puntuacion);
 });
 
-const botonReiniciar: HTMLButtonElement = document.querySelector(
-  "#reiniciar"
-) as HTMLButtonElement;
+const botonReiniciar = document.querySelector("#reiniciar");
 if (botonReiniciar !== null && botonReiniciar !== undefined) {
   botonReiniciar.addEventListener("click", () => {
     reiniciarJuego();
   });
 }
 
-const botonPedirCarta: HTMLButtonElement = document.querySelector(
-  "#pedir-carta"
-) as HTMLButtonElement;
+const botonPedirCarta = document.querySelector("#pedir-carta");
 if (
   botonPedirCarta !== null &&
   botonPedirCarta !== undefined &&
@@ -239,9 +262,7 @@ if (
   botonPedirCarta.addEventListener("click", dameCarta);
 }
 
-const botonPlantarse: HTMLButtonElement = document.querySelector(
-  "#plantarse"
-) as HTMLButtonElement;
+const botonPlantarse = document.querySelector("#plantarse");
 if (
   botonPlantarse !== null &&
   botonPlantarse !== undefined &&
