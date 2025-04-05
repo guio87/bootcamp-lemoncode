@@ -21,6 +21,7 @@ const controlarValorCarta = (carta: number): number => {
   }
   return carta;
 };
+
 //OBTENER URL CARTA
 const obtenerUrlCarta = (carta: number): string => {
   switch (carta) {
@@ -54,21 +55,48 @@ const dameCarta = (): void => {
   const numeroAleatorio = eligeNumero();
   const carta = controlarValorCarta(numeroAleatorio);
   console.log(carta);
-  mostrarCarta(carta);
+  const url = obtenerUrlCarta(carta);
+  mostrarCarta(url);
+  const puntusCarta = obtenerPuntos(carta);
+  const puntosSumados = sumarPuntos(puntusCarta);
+  actualizarPuntuacion(puntosSumados);
   sumarPuntuacion(carta);
+  verSiPierdo();
 };
 
 //MOSTRAR CARTA
-const mostrarCarta = (carta: number): void => {
-  const cartaImg = document.querySelector(
-    "#carta-mostrada"
-  ) as HTMLImageElement;
-  const url = obtenerUrlCarta(carta);
-  cartaImg?.setAttribute(
-    "src",
-    "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/" +
-      url
-  );
+const mostrarCarta = (urlCarta: string): void => {
+  const cartaImg = document.querySelector("#carta-mostrada");
+
+  if (cartaImg && cartaImg instanceof HTMLImageElement) {
+    cartaImg.setAttribute(
+      "src",
+      "https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/main/cartas/copas/" +
+        urlCarta
+    );
+  }
+};
+
+const obtenerPuntos = (carta: number) => {
+  if (carta > 7) {
+    return 0.5;
+  }
+
+  return carta;
+};
+
+const sumarPuntos = (puntos: number) => {
+  return puntos + puntuacion;
+};
+
+const actualizarPuntuacion = (nuevosPuntos: number) => {
+  puntuacion = nuevosPuntos;
+};
+
+const verSiPierdo = () => {
+  if (puntuacion > 7.5) {
+    gameOver();
+  }
 };
 
 //SUMAR PUNTUACION
@@ -214,30 +242,34 @@ const reiniciarJuego = (): void => {
 
 //PLANTARSE
 const mePlanto = (): void => {
-  const mensajePlantar: HTMLElement = document.querySelector(
-    ".mensajePlantar"
-  ) as HTMLElement;
-
   if (puntuacion <= 4) {
-    mensajePlantar.innerText = "Has sido muy conservador";
+    mostrarMensaje("Has sido muy conservador");
     mostrarBotonReiniciar();
     disableBotonPedirCarta();
     disableBotonPlantarse();
   } else if (puntuacion === 5) {
-    mensajePlantar.innerText = "Te ha entrado el canguelo eh?";
+    mostrarMensaje("Te ha entrado el canguelo eh?");
     mostrarBotonReiniciar();
     disableBotonPedirCarta();
     disableBotonPlantarse();
   } else if (puntuacion === 6 || puntuacion === 7) {
-    mensajePlantar.innerText = "Casi casi...";
+    mostrarMensaje("Casi casi...");
     mostrarBotonReiniciar();
     disableBotonPedirCarta();
     disableBotonPlantarse();
   } else if (puntuacion === 7.5) {
-    mensajePlantar.innerText = "¡ Lo has clavado! ¡Enhorabuena!";
+    mostrarMensaje("¡ Lo has clavado! ¡Enhorabuena!");
     mostrarBotonReiniciar();
     disableBotonPedirCarta();
     disableBotonPlantarse();
+  }
+};
+
+const mostrarMensaje = (mensaje: string) => {
+  const mensajePlantar = document.querySelector(".mensajePlantar");
+
+  if (mensajePlantar && mensajePlantar instanceof HTMLParagraphElement) {
+    mensajePlantar.innerText = mensaje;
   }
 };
 
