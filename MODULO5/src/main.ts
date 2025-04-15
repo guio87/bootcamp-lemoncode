@@ -57,10 +57,10 @@ const dameCarta = (): void => {
   console.log(carta);
   const url = obtenerUrlCarta(carta);
   mostrarCarta(url);
-  const puntusCarta = obtenerPuntos(carta);
-  const puntosSumados = sumarPuntos(puntusCarta);
+  const puntosCarta = obtenerPuntos(carta);
+  const puntosSumados = sumarPuntos(puntosCarta);
   actualizarPuntuacion(puntosSumados);
-  sumarPuntuacion(carta);
+  muestraPuntuacion(puntuacion);
   verSiPierdo();
 };
 
@@ -99,29 +99,13 @@ const verSiPierdo = () => {
   }
 };
 
-//SUMAR PUNTUACION
-const sumarPuntuacion = (carta: number): void => {
-  if (carta === 10 || carta === 11 || carta === 12) {
-    puntuacion += 0.5;
-  } else if (carta <= 7) {
-    puntuacion += carta;
-  }
-  muestraPuntuacion(puntuacion);
-  if (puntuacion > 7.5) {
-    gameOver();
-  }
-};
-
 //PERDER
 const gameOver = (): void => {
-  // const resultado: HTMLElement = document.querySelector(
-  //   ".puntos"
-  // ) as HTMLHeadingElement;
-  // resultado.style.display = "none";
-  const gameOverText: HTMLHeadingElement = document.querySelector(
-    ".game-over"
-  ) as HTMLHeadingElement;
-  gameOverText.style.display = "block";
+  const gameOverText: HTMLHeadingElement | null =
+    document.querySelector(".game-over");
+  if (gameOverText instanceof HTMLHeadingElement) {
+    gameOverText.style.display = "block";
+  }
   disableBotonPedirCarta();
   disableBotonPlantarse();
   mostrarBotonReiniciar();
@@ -129,9 +113,8 @@ const gameOver = (): void => {
 
 //MOSTRAR BOTON REINICIAR
 const mostrarBotonReiniciar = (): void => {
-  const botonReiniciar: HTMLButtonElement = document.querySelector(
-    "#reiniciar"
-  ) as HTMLButtonElement;
+  const botonReiniciar: HTMLButtonElement | null =
+    document.querySelector("#reiniciar");
   if (botonReiniciar instanceof HTMLButtonElement) {
     botonReiniciar.style.display = "block";
   }
@@ -139,9 +122,8 @@ const mostrarBotonReiniciar = (): void => {
 
 //INHABILITAR BOTON PEDIR CARTA
 const disableBotonPedirCarta = (): void => {
-  const botonPedirCarta: HTMLButtonElement = document.querySelector(
-    "#pedir-carta"
-  ) as HTMLButtonElement;
+  const botonPedirCarta: HTMLButtonElement | null =
+    document.querySelector("#pedir-carta");
   if (botonPedirCarta instanceof HTMLButtonElement) {
     botonPedirCarta.disabled = true;
   }
@@ -149,9 +131,8 @@ const disableBotonPedirCarta = (): void => {
 
 //MOSTRAR BOTON PEDIR CARTA
 const mostrarBotonPedirCarta = (): void => {
-  const botonPedirCarta: HTMLButtonElement = document.querySelector(
-    "#pedir-carta"
-  ) as HTMLButtonElement;
+  const botonPedirCarta: HTMLButtonElement | null =
+    document.querySelector("#pedir-carta");
   if (botonPedirCarta instanceof HTMLButtonElement) {
     botonPedirCarta.disabled = false;
   }
@@ -159,9 +140,8 @@ const mostrarBotonPedirCarta = (): void => {
 
 //INHABILITAR BOTON PLANTARSE
 const disableBotonPlantarse = (): void => {
-  const botonPlantarse: HTMLButtonElement = document.querySelector(
-    "#plantarse"
-  ) as HTMLButtonElement;
+  const botonPlantarse: HTMLButtonElement | null =
+    document.querySelector("#plantarse");
   if (botonPlantarse instanceof HTMLButtonElement) {
     botonPlantarse.disabled = true;
   }
@@ -169,9 +149,8 @@ const disableBotonPlantarse = (): void => {
 
 //HABILITAR BOTON PLANTARSE
 const enableBotonPlantarse = (): void => {
-  const botonPlantarse: HTMLButtonElement = document.querySelector(
-    "#plantarse"
-  ) as HTMLButtonElement;
+  const botonPlantarse: HTMLButtonElement | null =
+    document.querySelector("#plantarse");
   if (botonPlantarse instanceof HTMLButtonElement) {
     botonPlantarse.disabled = false;
   }
@@ -179,27 +158,34 @@ const enableBotonPlantarse = (): void => {
 
 //OCULTAR TEXTO GANAR
 const ocultarTextoGanar = (): void => {
-  const winnerText: HTMLHeadingElement = document.querySelector(
-    ".winner"
-  ) as HTMLHeadingElement;
-  if (winnerText && winnerText.style.display === "block") {
+  const winnerText: HTMLHeadingElement | null =
+    document.querySelector(".winner");
+  if (
+    winnerText &&
+    winnerText instanceof HTMLHeadingElement &&
+    winnerText.style.display === "block"
+  ) {
     winnerText.style.display = "none";
   }
 };
 
 //OCULTAR TEXTO PERDER
 const ocultarTextoPerder = (): void => {
-  const gameOverText: HTMLHeadingElement = document.querySelector(
-    ".game-over"
-  ) as HTMLHeadingElement;
-  if (gameOverText && gameOverText.style.display === "block") {
+  const gameOverText: HTMLHeadingElement | null =
+    document.querySelector(".game-over");
+  if (
+    gameOverText &&
+    gameOverText instanceof HTMLHeadingElement &&
+    gameOverText.style.display === "block"
+  ) {
     gameOverText.style.display = "none";
   }
 };
 
 // OCULTAR BOTON REINICIAR
 const ocultarBotonReiniciar = (): void => {
-  const botonReiniciar = document.querySelector("#reiniciar");
+  const botonReiniciar: HTMLButtonElement | null =
+    document.querySelector("#reiniciar");
   if (botonReiniciar instanceof HTMLButtonElement) {
     botonReiniciar.style.display = "none";
   }
@@ -207,13 +193,14 @@ const ocultarBotonReiniciar = (): void => {
 
 //MOSTRAR REVERSO CARTA
 const mostrarReversoCarta = (): void => {
-  const cartaVuelta = document.querySelector(
-    "#carta-mostrada"
-  ) as HTMLImageElement;
-  cartaVuelta.setAttribute(
-    "src",
-    "https://github.com/Lemoncode/fotos-ejemplos/blob/main/cartas/back.jpg?raw=true"
-  );
+  const cartaVuelta: HTMLImageElement | null =
+    document.querySelector("#carta-mostrada");
+  if (cartaVuelta instanceof HTMLImageElement) {
+    cartaVuelta.setAttribute(
+      "src",
+      "https://github.com/Lemoncode/fotos-ejemplos/blob/main/cartas/back.jpg?raw=true"
+    );
+  }
 };
 
 //VACIAR MENSAJE PLANTAR
@@ -229,10 +216,6 @@ const reiniciarJuego = (): void => {
   ocultarTextoGanar();
   ocultarTextoPerder();
   muestraPuntuacion(puntuacion);
-  // const resultado: HTMLElement = document.querySelector(
-  //   ".puntos"
-  // ) as HTMLHeadingElement;
-  // resultado.style.display = "block";
   mostrarBotonPedirCarta();
   enableBotonPlantarse();
   ocultarBotonReiniciar();
@@ -279,7 +262,11 @@ addEventListener("DOMContentLoaded", () => {
 });
 
 const botonReiniciar = document.querySelector("#reiniciar");
-if (botonReiniciar !== null && botonReiniciar !== undefined) {
+if (
+  botonReiniciar !== null &&
+  botonReiniciar !== undefined &&
+  botonReiniciar instanceof HTMLButtonElement
+) {
   botonReiniciar.addEventListener("click", () => {
     reiniciarJuego();
   });
