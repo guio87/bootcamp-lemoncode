@@ -1,22 +1,29 @@
-import { numeroDado, comprobarSiPierde, resetCero, sumarPuntos } from "./motor";
-let puntuacionGlobal = 0;
-export const iniciarJuego = () => {
+import { partida } from "./model";
+import {
+  numeroDado,
+  comprobarSiPierde,
+  actualizarPuntuacion,
+  sumarPuntos,
+} from "./motor";
+
+export const iniciarJuego = (): void => {
   let numDado = numeroDado();
   muestraDado(numDado);
   muestraImagenOculta();
 
   const pierdeOGana = comprobarSiPierde(numDado);
-  if (pierdeOGana === true) {
+  if (pierdeOGana) {
     mostrarMensaje("Lo siento, has perdido");
     refresh();
+  } else {
+    const puntosSumados = sumarPuntos(numDado);
+    actualizarPuntuacion(puntosSumados);
+    mostrarPuntuacion(partida.puntuacion);
+    if (partida.puntuacion >= 50) {
+      mostrarMensaje("Felicidades, has ganado");
+      refresh();
+    }
   }
-  puntuacionGlobal = sumarPuntos(numDado);
-  actualizaPuntuacion(puntuacionGlobal);
-  if (puntuacionGlobal >= 50) {
-    mostrarMensaje("Felicidades, has ganado");
-    refresh();
-  }
-  return puntuacionGlobal;
 };
 const refresh = () => {
   deshabilitarBtnPlantarse();
@@ -25,15 +32,15 @@ const refresh = () => {
 };
 export const plantarse = () => {
   refresh();
-  mostrarMensaje(" Te has plantado con " + puntuacionGlobal + " puntos");
+  mostrarMensaje(" Te has plantado con " + partida.puntuacion + " puntos");
 };
 
 export const reiniciar = () => {
   habilitarBtnPlantarse();
   habilitarBtnTirar();
   ocultarMensaje();
-  actualizaPuntuacion(0);
-  resetCero();
+  mostrarPuntuacion(0);
+  actualizarPuntuacion(0);
   ocultarBotonReiniciar();
 };
 
@@ -66,10 +73,13 @@ export const mostrarMensaje = (mensaje: string): void => {
 };
 
 export const ocultarMensaje = (): void => {
-  const mensajeResultado: HTMLElement | null =
-    document.querySelector("#mensaje-resultado");
+  const mensajeResultado = document.querySelector("#mensaje-resultado");
 
-  if (mensajeResultado) {
+  if (
+    mensajeResultado !== null &&
+    mensajeResultado !== undefined &&
+    mensajeResultado instanceof HTMLElement
+  ) {
     mensajeResultado.setAttribute("style", "display: none;");
   }
 };
@@ -80,7 +90,7 @@ const mostrarBotonReiniciar = (): void => {
     botonReiniciar !== undefined &&
     botonReiniciar instanceof HTMLButtonElement
   ) {
-    botonReiniciar?.setAttribute("style", "display:block");
+    botonReiniciar.setAttribute("style", "display:block");
   }
 };
 
@@ -91,7 +101,7 @@ const ocultarBotonReiniciar = (): void => {
     botonReiniciar !== undefined &&
     botonReiniciar instanceof HTMLButtonElement
   ) {
-    botonReiniciar?.setAttribute("style", "display:none");
+    botonReiniciar.setAttribute("style", "display:none");
   }
 };
 
@@ -139,7 +149,7 @@ const habilitarBtnTirar = (): void => {
   }
 };
 
-export const actualizaPuntuacion = (puntos: number) => {
+export const mostrarPuntuacion = (puntos: number) => {
   const campoPuntos = document.querySelector("#puntuacion-obtenida");
   if (campoPuntos) {
     campoPuntos.innerHTML = "Puntos : " + puntos;

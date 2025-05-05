@@ -1,21 +1,16 @@
-import {} from "./model";
-let puntuacion = 0;
+import { partida } from "./model";
+
 export const numeroDado = (): number => {
   return Math.floor(Math.random() * 6) + 1;
 };
 
 export const comprobarSiPierde = (numero: number): Boolean => {
-  if (numero === 6) {
-    return true;
-  } else {
-    return false;
-  }
+  return numero === 6;
 };
 
 export let sumarPuntos = (numDado: number) => {
-  return (puntuacion = puntuacion + numDado);
+  return partida.puntuacion + numDado;
 };
-
-export const resetCero = () => {
-  puntuacion = 0;
+export const actualizarPuntuacion = (puntosSumados: number) => {
+  partida.puntuacion = puntosSumados;
 };
