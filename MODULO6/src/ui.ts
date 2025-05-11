@@ -1,5 +1,11 @@
-export {} from "./motor";
-export {} from "./model";
+import {
+  actualizarPuntuacion,
+  controlarValorCarta,
+  eligeNumero,
+  obtenerPuntos,
+  sumarPuntos,
+} from "./motor";
+import { partida } from "./model";
 
 //MOSTRAR PUNTUACION
 export const muestraPuntuacion = (puntuacion: number): void => {
@@ -51,7 +57,7 @@ export const mostrarCarta = (urlCarta: string): void => {
 };
 
 //MOSTRAR BOTON REINICIAR
-export const mostrarBotonReiniciar = (): void => {
+const mostrarBotonReiniciar = (): void => {
   const botonReiniciar: HTMLButtonElement | null =
     document.querySelector("#reiniciar");
   if (botonReiniciar instanceof HTMLButtonElement) {
@@ -60,7 +66,7 @@ export const mostrarBotonReiniciar = (): void => {
 };
 
 //INHABILITAR BOTON PEDIR CARTA
-export const disableBotonPedirCarta = (): void => {
+const disableBotonPedirCarta = (): void => {
   const botonPedirCarta: HTMLButtonElement | null =
     document.querySelector("#pedir-carta");
   if (botonPedirCarta instanceof HTMLButtonElement) {
@@ -69,7 +75,7 @@ export const disableBotonPedirCarta = (): void => {
 };
 
 //MOSTRAR BOTON PEDIR CARTA
-export const mostrarBotonPedirCarta = (): void => {
+const mostrarBotonPedirCarta = (): void => {
   const botonPedirCarta: HTMLButtonElement | null =
     document.querySelector("#pedir-carta");
   if (botonPedirCarta instanceof HTMLButtonElement) {
@@ -78,7 +84,7 @@ export const mostrarBotonPedirCarta = (): void => {
 };
 
 //INHABILITAR BOTON PLANTARSE
-export const disableBotonPlantarse = (): void => {
+const disableBotonPlantarse = (): void => {
   const botonPlantarse: HTMLButtonElement | null =
     document.querySelector("#plantarse");
   if (botonPlantarse instanceof HTMLButtonElement) {
@@ -87,7 +93,7 @@ export const disableBotonPlantarse = (): void => {
 };
 
 //HABILITAR BOTON PLANTARSE
-export const enableBotonPlantarse = (): void => {
+const enableBotonPlantarse = (): void => {
   const botonPlantarse: HTMLButtonElement | null =
     document.querySelector("#plantarse");
   if (botonPlantarse instanceof HTMLButtonElement) {
@@ -96,7 +102,7 @@ export const enableBotonPlantarse = (): void => {
 };
 
 //OCULTAR TEXTO GANAR
-export const ocultarTextoGanar = (): void => {
+const ocultarTextoGanar = (): void => {
   const winnerText: HTMLHeadingElement | null =
     document.querySelector(".winner");
   if (
@@ -109,7 +115,7 @@ export const ocultarTextoGanar = (): void => {
 };
 
 //OCULTAR TEXTO PERDER
-export const ocultarTextoPerder = (): void => {
+const ocultarTextoPerder = (): void => {
   const gameOverText: HTMLHeadingElement | null =
     document.querySelector(".game-over");
   if (
@@ -122,7 +128,7 @@ export const ocultarTextoPerder = (): void => {
 };
 
 // OCULTAR BOTON REINICIAR
-export const ocultarBotonReiniciar = (): void => {
+const ocultarBotonReiniciar = (): void => {
   const botonReiniciar: HTMLButtonElement | null =
     document.querySelector("#reiniciar");
   if (botonReiniciar instanceof HTMLButtonElement) {
@@ -131,7 +137,7 @@ export const ocultarBotonReiniciar = (): void => {
 };
 
 //MOSTRAR REVERSO CARTA
-export const mostrarReversoCarta = (): void => {
+const mostrarReversoCarta = (): void => {
   const cartaVuelta: HTMLImageElement | null =
     document.querySelector("#carta-mostrada");
   if (cartaVuelta instanceof HTMLImageElement) {
@@ -143,17 +149,87 @@ export const mostrarReversoCarta = (): void => {
 };
 
 //VACIAR MENSAJE PLANTAR
-export const vaciarMensajePlantar = (): void => {
+const vaciarMensajePlantar = (): void => {
   const mensajePlantar: HTMLElement = document.querySelector(
     ".mensajePlantar"
   ) as HTMLElement;
   mensajePlantar.innerHTML = "";
 };
 
-export const mostrarMensaje = (mensaje: string) => {
+const mostrarMensaje = (mensaje: string) => {
   const mensajePlantar = document.querySelector(".mensajePlantar");
 
   if (mensajePlantar && mensajePlantar instanceof HTMLParagraphElement) {
     mensajePlantar.innerText = mensaje;
   }
+};
+
+const verSiPierdo = () => {
+  if (partida.puntuacion > 7.5) {
+    gameOver();
+  }
+};
+
+//PERDER
+const gameOver = (): void => {
+  const gameOverText: HTMLHeadingElement | null =
+    document.querySelector(".game-over");
+  if (gameOverText instanceof HTMLHeadingElement) {
+    gameOverText.style.display = "block";
+  }
+  disableBotonPedirCarta();
+  disableBotonPlantarse();
+  mostrarBotonReiniciar();
+};
+
+//REINICIAR JUEGO
+export const reiniciarJuego = (): void => {
+  partida.puntuacion = 0;
+  ocultarTextoGanar();
+  ocultarTextoPerder();
+  muestraPuntuacion(partida.puntuacion);
+  mostrarBotonPedirCarta();
+  enableBotonPlantarse();
+  ocultarBotonReiniciar();
+  mostrarReversoCarta();
+  vaciarMensajePlantar();
+};
+
+//PLANTARSE
+export const mePlanto = (): void => {
+  if (partida.puntuacion <= 4) {
+    mostrarMensaje("Has sido muy conservador");
+    mostrarBotonReiniciar();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
+  } else if (partida.puntuacion === 5) {
+    mostrarMensaje("Te ha entrado el canguelo eh?");
+    mostrarBotonReiniciar();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
+  } else if (partida.puntuacion === 6 || partida.puntuacion === 7) {
+    mostrarMensaje("Casi casi...");
+    mostrarBotonReiniciar();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
+  } else if (partida.puntuacion === 7.5) {
+    mostrarMensaje("¡ Lo has clavado! ¡Enhorabuena!");
+    mostrarBotonReiniciar();
+    disableBotonPedirCarta();
+    disableBotonPlantarse();
+  }
+};
+
+//PEDIR CARTA
+export const dameCarta = (): void => {
+  const numeroAleatorio = eligeNumero();
+  const carta = controlarValorCarta(numeroAleatorio);
+  console.log(carta);
+  const url = obtenerUrlCarta(carta);
+  mostrarCarta(url);
+  const puntosCarta = obtenerPuntos(carta);
+  const puntosSumados = sumarPuntos(puntosCarta);
+  actualizarPuntuacion(puntosSumados);
+  muestraPuntuacion(partida.puntuacion);
+  verSiPierdo();
 };

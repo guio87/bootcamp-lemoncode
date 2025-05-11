@@ -1,5 +1,4 @@
-import { muestraPuntuacion } from "./ui";
-import { reiniciarJuego, dameCarta, mePlanto } from "./motor";
+import { muestraPuntuacion, reiniciarJuego, dameCarta, mePlanto } from "./ui";
 import { partida } from "./model";
 
 //CONTROLAR BOTONES
