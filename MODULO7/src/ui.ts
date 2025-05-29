@@ -4,6 +4,7 @@ import {
   eligeNumero,
   obtenerPuntos,
   sumarPuntos,
+  gestionarEstadoPartida,
 } from "./motor";
 import { partida } from "./model";
 
@@ -165,7 +166,7 @@ const mostrarMensaje = (mensaje: string) => {
 };
 
 const verSiPierdo = () => {
-  if (partida.puntuacion > 7.5) {
+  if (gestionarEstadoPartida() === "Perder") {
     gameOver();
   }
 };

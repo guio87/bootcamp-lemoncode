@@ -1,4 +1,4 @@
-import { partida } from "./model";
+import { EstadoPartida, partida } from "./model";
 
 //ELEGIR NÚMERO
 export const eligeNumero = (): number => {
@@ -27,4 +27,13 @@ export const sumarPuntos = (puntos: number) => {
 
 export const actualizarPuntuacion = (nuevosPuntos: number) => {
   partida.puntuacion = nuevosPuntos;
+};
+
+export const gestionarEstadoPartida = (): EstadoPartida => {
+  if (partida.puntuacion === 7.5) {
+    partida.estadoPartida = "Ganar";
+  } else if (partida.puntuacion > 7.5) {
+    partida.estadoPartida = "Perder";
+  }
+  return partida.estadoPartida;
 };
