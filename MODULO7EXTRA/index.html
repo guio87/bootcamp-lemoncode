@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Llega al 50</h1>
+      <div class="buttons">
+        <button type="button" id="tirar" class="btn btn-primary">Tirar</button>
+        <button type="button" id="plantarse" class="btn btn-primary">
+          Plantarse
+        </button>
+        <button type="button" id="reiniciar" class="btn btn-primary hidden">
+          Reiniciar juego
+        </button>
+      </div>
+
+      <div id="elements">
+        <img
+          id="dado"
+          alt="dado para jugar"
+          src="https://raw.githubusercontent.com/Lemoncode/fotos-ejemplos/refs/heads/main/dados/cara1.png"
+          style="display: none"
+        />
+        <p id="puntuacion-obtenida">Puntos : 0</p>
+        <p id="mensaje-resultado"></p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+!
