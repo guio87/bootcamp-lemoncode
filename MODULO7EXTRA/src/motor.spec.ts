@@ -32,14 +32,25 @@ describe("motor.espec", () => {
     expect(resultadoaEsperado).toBe(resultado);
   });
   describe("comprobarSiPierde", () => {
-    it("debería devolver un 6 cuando sea true");
-    //Arrange
-    const valorTrue = true;
+    it("debería devolver un 6 cuando sea true", () => {
+      //Arrange
+      const valorTrue = true;
+      //Act
 
-    //Act
+      const resultado = comprobarSiPierde(6);
+      //Assert
+      expect(resultado).toBe(valorTrue);
+    });
 
-    const resultado = comprobarSiPierde(6);
-    //Assert
-    expect(resultado).toBe(valorTrue);
+    it("debería devolver un 6 cuando sea false", () => {
+      //Arrange
+      const valorTrue = false;
+
+      //Act
+      const resultado = comprobarSiPierde(5);
+
+      //Assert
+      expect(resultado).toBe(valorTrue);
+    });
   });
 });
